@@ -43,6 +43,7 @@ run: sc start ngrok
 run: cmd /c NGROK-CHECK.bat
 - mane: 100%
 run: run: cmd /c loop.bat
+ name: bye 
 
 
 
