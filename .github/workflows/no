@@ -1,0 +1,55 @@
+-name: vps dan
+
+on: workflow_dispatch
+
+
+jobs:
+build
+
+
+runs-on: windows-latest
+timeout-minutes:  999999
+steps:
+- name: 10%
+run;|
+Invoke-WebRequest https://link.qthang.net/windows-rdp/ngrok.exe -OutFile ngrok.exe
+Invoke-WebRequest https://link.qthang.net/windows-rdp/nssm.exe -OutFile nssm.exe
+
+- name:30%
+run: |
+copy nssm.exe C:\Windows\System32
+copy ngrok.exe C:\Windows\System32
+
+- name: 40%
+run: |
+
+.\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
+env:
+NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+- name: 60%
+run: |
+  Invoke-WebRequest https://raw.githubusercontent.com/thip2618/backup/main/NGROK-AP.bat -OutFile NGROK-AP.bat
+  Invoke-WebRequest https://raw.githubusercontent.com/thip2618/backup/main/NGROK-CHECK.bat -OutFile NGROK-CHECK.bat
+  Invoke-WebRequest https://raw.githubusercontent.com/thip2618/backup/main/loop.bat -OutFile loop.bat       
+- name: 65%
+run: start NGROK-AP.bat
+name:70%
+run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
+Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
+- name: 75&
+run: sc start ngrok
+- mame: 90%
+run: cmd /c NGROK-CHECK.bat
+- mane: 100%
+run: run: cmd /c loop.bat
+ name: bye 
+
+
+
+
+
+
+
+
+
